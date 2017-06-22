@@ -8,6 +8,10 @@ fib n   = fib (n - 1) + fib (n - 2)
 fibs1 :: [Integer]
 fibs1 = [fib n | n <- [0..]]
 
+fibs2 :: [Integer]
+fibs2 = fibTmp 0 1 where
+    fibTmp a b = a : fibTmp b (a + b)
+
 main :: IO ()
 main = do
   putStrLn "hello world"
