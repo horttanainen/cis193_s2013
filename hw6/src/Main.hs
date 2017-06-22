@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -fno-warn-missing-methods #-}
+
 module Main where
 
 fib :: Integer -> Integer
@@ -31,6 +33,22 @@ streamFromSeed f a = Cons a (streamFromSeed f (f a))
 
 nats :: Stream Integer
 nats = streamFromSeed (+1) 0
+
+
+-- ruler skipped. Could not figure it out
+
+-- ex 6 skipped because I am not interested
+
+data Matrix = Matrix Integer Integer Integer Integer
+    deriving Show
+
+instance Num Matrix where
+    (*) (Matrix a b c d) (Matrix e f g h) = (Matrix (a * e + b * g) (a * f + b * h) (c * e + d * g) (c * f + d * h) )
+
+fibs4 :: Integer -> Integer
+fibs4 0 = 0
+fibs4 n = let get (Matrix _ b _ _) = b
+    in get ((Matrix 1 1 1 0)^n)
 
 main :: IO ()
 main = do
