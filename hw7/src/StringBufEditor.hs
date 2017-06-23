@@ -1,5 +1,6 @@
 module Main where
 
+import JoinList
 import StringBuffer
 import Editor
 
