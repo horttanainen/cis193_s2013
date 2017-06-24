@@ -17,15 +17,37 @@ tag (Append m _ _)  = m
 (+++) l1 l2 = Append ((tag l1) <> (tag l2)) l1 l2
 
 indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
-indexJ _ Empty                              = Nothing
-indexJ i _ | i < 0                          = Nothing
+indexJ _ Empty          = Nothing
+indexJ i _ | i < 0      = Nothing
 indexJ i (Single _ a)
     | i == 0            = Just a
     | otherwise         = Nothing
 indexJ i (Append b left right)
-    | i > wholeSize             = Nothing
-    | i <= leftSize             = indexJ i left
+    | i >= wholeSize            = Nothing
+    | i < leftSize              = indexJ i left
     | otherwise                 = indexJ (i - leftSize) right
     where
         wholeSize   = getSize $ size b
         leftSize    = getSize $ size $ tag left
+
+-- For testing purposes only
+
+(!!?) :: [a] -> Int -> Maybe a
+[]  !!? _ = Nothing
+_   !!? i | i < 0 = Nothing
+(x:xs) !!? 0 = Just x
+(x:xs) !!? i = xs !!? (i-1)
+
+jlToList :: JoinList m a -> [a]
+jlToList Empty          = []
+jlToList (Single _ a)   = [a]
+jlToList (Append _ l1 l2) = jlToList l1 ++ jlToList l2
+
+testJ :: JoinList Size Char
+testJ = Append (Size 4)
+            (Append (Size 3)
+                (Single (Size 1) 'y')
+                (Append (Size 2)
+                    (Single (Size 1) 'e')
+                    (Single (Size 1) 'a')))
+            (Single (Size 1) 'h')
