@@ -30,6 +30,20 @@ indexJ i (Append b left right)
         wholeSize   = getSize $ size b
         leftSize    = getSize $ size $ tag left
 
+
+dropJ :: (Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
+dropJ _ Empty           = Empty
+dropJ 0 joinL           = joinL
+dropJ n (Single _ _)    = Empty
+dropJ n (Append b left right)
+    | n >= wholeSize    = Empty
+    | n == leftSize     = right
+    | n < leftSize      = Append b (dropJ n left) right
+    | n > leftSize      = dropJ (n - leftSize) right
+    where
+        wholeSize   = getSize $ size b
+        leftSize    = getSize $ size $ tag left
+
 -- For testing purposes only
 
 (!!?) :: [a] -> Int -> Maybe a
@@ -43,8 +57,8 @@ jlToList Empty          = []
 jlToList (Single _ a)   = [a]
 jlToList (Append _ l1 l2) = jlToList l1 ++ jlToList l2
 
-testJ :: JoinList Size Char
-testJ = Append (Size 4)
+jl  :: JoinList Size Char
+jl  = Append (Size 4)
             (Append (Size 3)
                 (Single (Size 1) 'y')
                 (Append (Size 2)
