@@ -44,6 +44,18 @@ dropJ n (Append b left right)
         wholeSize   = getSize $ size b
         leftSize    = getSize $ size $ tag left
 
+takeJ :: (Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
+takeJ _ Empty           = Empty
+takeJ 0 _               = Empty
+takeJ n s@(Single _ _)  = s
+takeJ n f@(Append b left right)
+    | n >= wholeSize    = f
+    | n == leftSize     = left
+    | n < leftSize      = takeJ n left
+    | n > leftSize      = Append b left (takeJ (n - leftSize) right)
+    where
+        wholeSize   = getSize $ size b
+        leftSize    = getSize $ size $ tag left
 -- For testing purposes only
 
 (!!?) :: [a] -> Int -> Maybe a
