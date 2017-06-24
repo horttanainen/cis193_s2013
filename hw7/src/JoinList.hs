@@ -34,7 +34,7 @@ indexJ i (Append b left right)
 
 dropJ :: (Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
 dropJ _ Empty           = Empty
-dropJ 0 joinL           = joinL
+dropJ n joinL | n < 1   = joinL
 dropJ n (Single _ _)    = Empty
 dropJ n (Append b left right)
     | n >= wholeSize    = Empty
@@ -60,6 +60,7 @@ takeJ n f@(Append b left right)
 
 scoreLine :: String -> JoinList Score String
 scoreLine s = Single (scoreString s) s
+
 -- For testing purposes only
 
 (!!?) :: [a] -> Int -> Maybe a
