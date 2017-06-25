@@ -1,6 +1,7 @@
 module Employee where
 
 import           Data.Tree
+import           Data.List
 
 -- Employee names are represented by Strings.
 type Name = String
@@ -46,7 +47,11 @@ testCompany2
 
 -- A type to store a list of guests and their total fun score.
 data GuestList = GL [Employee] Fun
-  deriving (Show, Eq)
+  deriving (Eq)
+
+instance Show GuestList where
+    show (GL empls fun)  = concat $ ["Total fun: ", show fun, "\n"]
+                                    ++ (sort $ map (\e -> (empName e) ++ "\n") empls)
 
 instance Ord GuestList where
   compare (GL _ f1) (GL _ f2) = compare f1 f2

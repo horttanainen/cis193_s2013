@@ -4,4 +4,4 @@ import Party
 
 main :: IO ()
 main = do
-  putStrLn "hello world"
+  readFile "src/company.txt" >>= print . maxFun . read
