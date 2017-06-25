@@ -17,3 +17,7 @@ moreFun gl1@(GL _ f1) gl2@(GL _ f2)
 
 treeFold :: (a -> [b] -> b) -> Tree a -> b
 treeFold f (Node v sf) = f v $ fmap (treeFold f) sf
+
+nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+nextLevel bob ls = ( glCons bob $ mconcat $ map snd ls,
+                    mconcat $ map (uncurry moreFun) ls)
