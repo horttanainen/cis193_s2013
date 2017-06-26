@@ -5,7 +5,6 @@
 module AParser where
 
 import           Control.Applicative
-
 import           Data.Char
 
 -- A parser for a value of type a is a function which takes a String
@@ -74,3 +73,10 @@ instance Applicative Parser where
                     g Nothing               = Nothing
                     g (Just (func, rest))   = first func <$> runParser p2 rest
             
+
+abParser = (,) <$> char 'a' <*> char 'b' :: Parser (Char, Char)
+
+abParser_ = const () <$> abParser :: Parser ()
+
+intPair :: Parser [Integer]
+intPair = (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt
